@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Komparasi Kredit Motor - Dealer vs Bank BRI (KUR &amp; Non-KUR)</title>
+    <!-- Import Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 30, 49, 0.7);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+            
+            /* Color Palettes */
+            --primary: #38bdf8; /* Sky Blue */
+            --primary-glow: rgba(56, 189, 248, 0.15);
+            
+            --dealer-color: #f43f5e; /* Rose */
+            --dealer-glow: rgba(244, 63, 94, 0.2);
+            
+            --bri-color: #0284c7; /* BRI Blue */
+            --bri-glow: rgba(2, 132, 199, 0.2);
+            
+            --nonkur-color: #10b981; /* Emerald Green */
+            --nonkur-glow: rgba(16, 185, 129, 0.2);
+            
+            --accent: #c084fc; /* Purple */
+            --accent-glow: rgba(192, 132, 252, 0.2);
+            
+            --glass-blur: blur(16px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(192, 132, 252, 0.08) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(2, 132, 199, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1280px;
+            width: 100%;
+        }
+
+        /* Header Styling */
+        header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .badge-academic {
+            background: linear-gradient(135deg, var(--accent), #6366f1);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 4px 15px rgba(192, 132, 252, 0.25);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 1.15rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .source-meta {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .source-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Main Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card System */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+            color: #fff;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .select-input {
+            width: 100%;
+            background: rgba(11, 15, 25, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 1rem 1.2rem;
+            color: var(--text-main);
+            font-size: 1rem;
+            font-weight: 500;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .select-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        /* Specs Panel */
+        .specs-panel {
+            background: rgba(11, 15, 25, 0.5);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            margin-top: 1.5rem;
+            border: 1px dashed rgba(255, 255, 255, 0.08);
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .spec-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .spec-label {
+            color: #64748b;
+        }
+
+        .spec-value {
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        /* 3-Way Card Container */
+        .results-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .three-way-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .three-way-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Option Sub-Cards */
+        .sub-card {
+            border-radius: 20px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 240px;
+            background: rgba(30, 41, 59, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .sub-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .sub-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+        }
+
+        .sub-card.dealer {
+            background: rgba(244, 63, 94, 0.02);
+            border-color: rgba(244, 63, 94, 0.08);
+        }
+
+        .sub-card.dealer::before {
+            background: var(--dealer-color);
+        }
+
+        .sub-card.bri-kur {
+            background: rgba(2, 132, 199, 0.02);
+            border-color: rgba(2, 132, 199, 0.08);
+        }
+
+        .sub-card.bri-kur::before {
+            background: var(--bri-color);
+        }
+
+        .sub-card.bri-nonkur {
+            background: rgba(16, 185, 129, 0.02);
+            border-color: rgba(16, 185, 129, 0.08);
+        }
+
+        .sub-card.bri-nonkur::before {
+            background: var(--nonkur-color);
+        }
+
+        .sub-card-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #94a3b8;
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-badge {
+            padding: 0.3rem 0.7rem;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
+        .dealer .card-badge {
+            background: rgba(244, 63, 94, 0.12);
+            color: var(--dealer-color);
+        }
+
+        .bri-kur .card-badge {
+            background: rgba(2, 132, 199, 0.12);
+            color: var(--primary);
+        }
+
+        .bri-nonkur .card-badge {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--nonkur-color);
+        }
+
+        .big-number {
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.03em;
+        }
+
+        .dealer .big-number { color: var(--dealer-color); }
+        .bri-kur .big-number { color: var(--primary); }
+        .bri-nonkur .big-number { color: var(--nonkur-color); }
+
+        .card-detail-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+            margin-top: 0.6rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            padding-top: 0.6rem;
+        }
+
+        .card-detail-label {
+            color: #64748b;
+        }
+
+        .card-detail-val {
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        /* Visual Chart Area */
+        .chart-section {
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+        }
+
+        .custom-chart-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .bar-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .bar-outer {
+            width: 100%;
+            height: 28px;
+            background: rgba(11, 15, 25, 0.6);
+            border-radius: 9999px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 3px;
+        }
+
+        .bar-inner {
+            height: 100%;
+            border-radius: 9999px;
+            width: 0%; /* Dynamic fill */
+            transition: width 1.2s cubic-bezier(0.1, 0.8, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .bar-inner.cash-bar {
+            background: linear-gradient(90deg, #64748b, #94a3b8);
+            color: #0b0f19;
+        }
+
+        .bar-inner.dealer-bar {
+            background: linear-gradient(90deg, #f43f5e, #fda4af);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(244, 63, 94, 0.25);
+        }
+
+        .bar-inner.bri-kur-bar {
+            background: linear-gradient(90deg, #0284c7, #38bdf8);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.25);
+        }
+
+        .bar-inner.bri-nonkur-bar {
+            background: linear-gradient(90deg, #10b981, #6ee7b7);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+        }
+
+        /* Savings Recommendation Banner */
+        .savings-banner {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.1), rgba(192, 132, 252, 0.1));
+            border: 1px solid rgba(2, 132, 199, 0.25);
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            animation: pulse-glow 3s infinite;
+        }
+
+        .savings-icon {
+            background: linear-gradient(135deg, var(--bri-color), var(--accent));
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            box-shadow: 0 5px 15px rgba(2, 132, 199, 0.35);
+        }
+
+        .savings-content h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: #fff;
+        }
+
+        .savings-content p {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .highlight-green {
+            color: #34d399;
+            font-weight: 800;
+        }
+
+        /* Table Card Section */
+        .table-card {
+            margin-top: 2rem;
+        }
+
+        .comparison-table-wrapper {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+            min-width: 600px;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .comparison-table th {
+            color: #64748b;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Detail notes box */
+        .info-note {
+            background: rgba(56, 189, 248, 0.03);
+            border-left: 4px solid var(--primary);
+            padding: 1.25rem;
+            border-radius: 0 16px 16px 0;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: #94a3b8;
+            margin-top: 1.5rem;
+        }
+
+        .info-note strong {
+            color: #fff;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(2, 132, 199, 0.08); }
+            50% { box-shadow: 0 0 25px rgba(2, 132, 199, 0.2); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <header>
+        <span class="badge-academic">Tugas Analisis Komparatif Finansial</span>
+        <h1>Kalkulator Kredit Motor &amp; Perbankan</h1>
+        <p>Analisis Perbandingan Skema Pembiayaan Konsumer (Leasing) dengan Skema Kredit Usaha Rakyat (KUR) BRI 7% Efektif &amp; Kredit Mikro Umum (Non-KUR) BRI 9% Efektif</p>
+        <div class="source-meta">
+            <span>📍 Lapangan: CV. Lombok Mas Motor (Probolinggo)</span>
+            <span>🏦 Bank: Kantor Cabang BRI Lamongan</span>
+            <span>👥 Narasumber: Andika Rahim (Dealer) &amp; Aulia (Bank)</span>
+        </div>
+    </header>
+
+    <div class="dashboard-grid">
+        <!-- Input controls (Left Side) -->
+        <div class="card">
+            <h2 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                Data Input
+            </h2>
+            
+            <!-- Motor Selection -->
+            <div class="form-group">
+                <label for="motor-select">Pilih Tipe Motor Honda:</label>
+                <select id="motor-select" class="select-input" onchange="updateMotorData()">
+                    <!-- Populated dynamically -->
+                </select>
+            </div>
+
+            <!-- Tenor Selection -->
+            <div class="form-group">
+                <label for="tenor-select">Jangka Waktu (Tenor):</label>
+                <select id="tenor-select" class="select-input" onchange="calculateKredit()">
+                    <option value="12">12 Bulan (1 Tahun)</option>
+                    <option value="24">24 Bulan (2 Tahun)</option>
+                    <option value="36" selected>36 Bulan (3 Tahun)</option>
+                    <option value="48">48 Bulan (4 Tahun)</option>
+                    <option value="60">60 Bulan (5 Tahun)</option>
+                </select>
+            </div>
+
+            <!-- Specs Display -->
+            <div class="specs-panel">
+                <div class="spec-item">
+                    <span class="spec-label">Harga Tunai OTR</span>
+                    <span class="spec-value" id="spec-otr">Rp 0</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">DP Dealer (Brosur)</span>
+                    <span class="spec-value" id="spec-dp">Rp 0</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Pokok Pinjaman</span>
+                    <span class="spec-value" id="spec-principal">Rp 0</span>
+                </div>
+            </div>
+
+            <div class="info-note" style="margin-top: 1.25rem; font-size: 0.85rem; padding: 1rem;">
+                💡 <strong>Syarat Berkas:</strong> Pembelian lewat kredit bank BRI Lamongan membutuhkan dokumen usaha (SKU Asli) serta KTP Suami Istri.
+            </div>
+        </div>
+
+        <!-- Analytical results display (Right Side) -->
+        <div class="card">
+            <h2 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                Analisis Finansial
+            </h2>
+
+            <div class="results-container">
+                <!-- 3-Way Sub Cards -->
+                <div class="three-way-cards">
+                    <!-- Dealer -->
+                    <div class="sub-card dealer">
+                        <div>
+                            <div class="sub-card-title">
+                                <span>Kredit Leasing</span>
+                                <span class="card-badge" id="dealer-badge">Brosur OTO/FIF</span>
+                            </div>
+                            <div class="big-number" id="dealer-monthly">Rp 0</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);" id="dealer-tenor-text">Angsuran / bulan</div>
+                        </div>
+                        <div>
+                            <div class="card-detail-item">
+                                <span class="card-detail-label">Total Bunga</span>
+                                <span class="card-detail-val" id="dealer-interest">Rp 0</span>
+                            </div>
+                            <div class="card-detail-item">
+                                <span class="card-detail-label">Rate Setara</span>
+                                <span class="card-detail-val" id="dealer-rate" style="color: var(--dealer-color);">0% Flat/Th</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BRI KUR -->
+                    <div class="sub-card bri-kur">
+                        <div>
+                            <div class="sub-card-title">
+                                <span>KUR BRI (7%)</span>
+                                <span class="card-badge">Bunga Subsidi</span>
+                            </div>
+                            <div class="big-number" id="bri-kur-monthly">Rp 0</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);" id="bri-kur-tenor-text">Angsuran / bulan</div>
+                        </div>
+                        <div>
+                            <div class="card-detail-item">
+                                <span class="card-detail-label">Bunga + Biaya</span>
+                                <span class="card-detail-val" id="bri-kur-interest">Rp 0</span>
+                            </div>
+                            <div class="card-detail-item">
+                                <span class="card-detail-label">Rate Setara</span>
+                                <span class="card-detail-val" id="bri-kur-rate" style="color: var(--primary);">0% Flat/Th</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BRI Non-KUR -->
+                    <div class="sub-card bri-nonkur">
+                        <div>
+                            <div class="sub-card-title">
+                                <span>BRI Non-KUR (9%)</span>
+                                <span class="card-badge">Kredit Komersial</span>
+                            </div>
+                            <div class="big-number" id="bri-nonkur-monthly">Rp 0</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);" id="bri-nonkur-tenor-text">Angsuran / bulan</div>
+                        </div>
+                        <div>
+                            <div class="card-detail-item">
+                                <span class="card-detail-label">Bunga + Biaya</span>
+                                <span class="card-detail-val" id="bri-nonkur-interest">Rp 0</span>
+                            </div>
+                            <div class="card-detail-item">
+                                <span class="card-detail-label">Rate Setara</span>
+                                <span class="card-detail-val" id="bri-nonkur-rate" style="color: var(--nonkur-color);">0% Flat/Th</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SVG/CSS Bars Chart -->
+                <div class="chart-section">
+                    <h3 style="font-size: 0.95rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Perbandingan Total Biaya Sampai Lunas</h3>
+                    
+                    <div class="custom-chart-wrapper">
+                        <!-- Cash -->
+                        <div class="bar-group">
+                            <div class="bar-label-row">
+                                <span>Beli Tunai (Harga OTR Motor)</span>
+                                <span id="lbl-cash-total">Rp 0</span>
+                            </div>
+                            <div class="bar-outer">
+                                <div id="bar-cash" class="bar-inner cash-bar">100%</div>
+                            </div>
+                        </div>
+
+                        <!-- KUR BRI -->
+                        <div class="bar-group">
+                            <div class="bar-label-row">
+                                <span>Skema KUR BRI 7% (Biaya Awal + Angsuran)</span>
+                                <span id="lbl-bri-kur-total" style="color: var(--primary);">Rp 0</span>
+                            </div>
+                            <div class="bar-outer">
+                                <div id="bar-bri-kur" class="bar-inner bri-kur-bar">0%</div>
+                            </div>
+                        </div>
+
+                        <!-- Non-KUR BRI -->
+                        <div class="bar-group">
+                            <div class="bar-label-row">
+                                <span>Skema BRI Non-KUR 9% (Biaya Awal + Angsuran)</span>
+                                <span id="lbl-bri-nonkur-total" style="color: var(--nonkur-color);">Rp 0</span>
+                            </div>
+                            <div class="bar-outer">
+                                <div id="bar-bri-nonkur" class="bar-inner bri-nonkur-bar">0%</div>
+                            </div>
+                        </div>
+
+                        <!-- Dealer -->
+                        <div class="bar-group">
+                            <div class="bar-label-row">
+                                <span>Skema Kredit Leasing (DP + Angsuran)</span>
+                                <span id="lbl-dealer-total" style="color: var(--dealer-color);">Rp 0</span>
+                            </div>
+                            <div class="bar-outer">
+                                <div id="bar-dealer" class="bar-inner dealer-bar">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Savings banner -->
+                <div class="savings-banner">
+                    <div class="savings-icon">💡</div>
+                    <div class="savings-content">
+                        <h4>Rekomendasi Efisiensi Finansial</h4>
+                        <p>Mengajukan modal lewat <strong>KUR Bank BRI 7% Efektif</strong> dapat menghemat <span class="highlight-green" id="savings-amount">Rp 0</span> dibandingkan skema Kredit Leasing dealer.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparative Table of Parameters -->
+    <div class="card table-card">
+        <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            Metrik Perbandingan Parameter Pembiayaan
+        </h2>
+        
+        <div class="comparison-table-wrapper">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Indikator</th>
+                        <th style="color: var(--dealer-color);">Kredit Leasing (Dealer)</th>
+                        <th style="color: var(--primary);">KUR Bank BRI 7%</th>
+                        <th style="color: var(--nonkur-color);">BRI Non-KUR 9%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: 600;">DP / Uang Muka Tunai</td>
+                        <td id="tbl-dealer-dp">Rp 0</td>
+                        <td id="tbl-bri-kur-dp">Rp 0</td>
+                        <td id="tbl-bri-nonkur-dp">Rp 0</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Suku Bunga Setara (Flat)</td>
+                        <td id="tbl-dealer-rate" style="color: var(--dealer-color); font-weight: 600;">0%</td>
+                        <td id="tbl-bri-kur-rate" style="color: var(--primary); font-weight: 600;">0%</td>
+                        <td id="tbl-bri-nonkur-rate" style="color: var(--nonkur-color); font-weight: 600;">0%</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Biaya Administrasi & Awal</td>
+                        <td>Rp 0<br><span style="font-size:0.75rem;color:var(--text-muted);">(Sdh masuk DP)</span></td>
+                        <td colspan="2" style="text-align: center;">Rp 525.000<br><span style="font-size:0.75rem;color:var(--text-muted);">(Admin 150rb + Provisi 0.25% + Asuransi Kebakaran 300rb)</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Persyaratan Khusus</td>
+                        <td>KTP Suami Istri &amp; KK saja</td>
+                        <td colspan="2" style="text-align: center; color: var(--accent); font-weight: 500;">Wajib memiliki Surat Usaha (SKU Asli) &amp; KTP Suami Istri</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Durasi Pencairan</td>
+                        <td style="color: var(--dealer-color); font-weight: 600;">1-2 Hari Kerja</td>
+                        <td colspan="2" style="text-align: center;">± 7 Hari Kerja</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Penalti Pelunasan Awal</td>
+                        <td>Denda tinggi (sisa cicilan + denda)</td>
+                        <td colspan="2" style="text-align: center; color: var(--primary); font-weight: 500;">Bebas Denda (Cukup bayar sisa pokok + bunga berjalan)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-note">
+            📌 <strong>Analisis Kebijakan:</strong> Kredit Usaha Rakyat (KUR) BRI memiliki tingkat bunga yang disubsidi oleh Pemerintah Indonesia untuk mendukung UMKM (7% efektif). Sedangkan BRI Non-KUR (9% efektif) adalah program komersial yang bunganya sedikit lebih tinggi namun persyaratannya biasanya lebih fleksibel.
+        </div>
+    </div>
+</div>
+
+<script>
+    // Data Riil Brosur CV. Lombok Mas Motor (Mei 2026)
+    // Ditambahkan opsi cicilan 42 bulan dari brosur jika ada (seperti Beat / Scoopy)
+    const motorData = [
+        { name: "Honda STYLO 160 CBS", otr: 31075000, dp: 3200000, installment36: 1326000, installment42: null },
+        { name: "Honda STYLO 160 ABS", otr: 34075000, dp: 3700000, installment36: 1464000, installment42: null },
+        { name: "Honda STYLO 160 ABS Special Colour", otr: 35575000, dp: 3900000, installment36: 1516000, installment42: null },
+        { name: "Honda BEAT Sporty DLX Smart Key", otr: 22425000, dp: 2000000, installment36: 955000, installment42: 905000 },
+        { name: "Honda BEAT Sporty CBS ISS Deluxe", otr: 21925000, dp: 1900000, installment36: 947000, installment42: 897000 },
+        { name: "Honda BEAT Sporty CBS", otr: 21075000, dp: 1800000, installment36: 898000, installment42: 848000 },
+        { name: "Honda BEAT Street", otr: 21925000, dp: 1900000, installment36: 935000, installment42: 885000 },
+        { name: "Honda SCOOPY Prestige/Stylish", otr: 25450000, dp: 2400000, installment36: 1055000, installment42: 1005000 },
+        { name: "Honda SCOOPY Energetic/Fashion", otr: 24600000, dp: 2200000, installment36: 1017000, installment42: 967000 },
+        { name: "Honda New VARIO 125 Street + Visor", otr: 28300000, dp: 2800000, installment36: 1161000, installment42: null },
+        { name: "Honda New VARIO 125 Street", otr: 28175000, dp: 2800000, installment36: 1157000, installment42: null },
+        { name: "Honda New VARIO 125 CBS ISS", otr: 27650000, dp: 2700000, installment36: 1149000, installment42: null },
+        { name: "Honda New VARIO 125 CBS", otr: 25875000, dp: 2400000, installment36: 1070000, installment42: null },
+        { name: "Honda ADV160 ABS Roadsync", otr: 43450000, dp: 4900000, installment36: 1847500, installment42: null },
+        { name: "Honda ADV160 ABS", otr: 41800000, dp: 4600000, installment36: 1782500, installment42: null },
+        { name: "Honda ADV160 CBS", otr: 38600000, dp: 4100000, installment36: 1604000, installment42: null },
+        { name: "Honda New PCX 160 ABS Roadsync", otr: 42800000, dp: 4800000, installment36: 1812000, installment42: null },
+        { name: "Honda New PCX 160 ABS", otr: 40000000, dp: 4300000, installment36: 1684000, installment42: null },
+        { name: "Honda New PCX 160 CBS", otr: 35825000, dp: 3700000, installment36: 1498000, installment42: null },
+        { name: "Honda VARIO 160 ABS", otr: 32375000, dp: 3200000, installment36: 1320000, installment42: null },
+        { name: "Honda VARIO 160 CBS (BK/WH)", otr: 29625000, dp: 2800000, installment36: 1192000, installment42: null },
+        { name: "Honda VARIO 160 CBS (BK/RD/BL)", otr: 29375000, dp: 2800000, installment36: 1178000, installment42: null }
+    ];
+
+    // Format Number to Rupiah IDR
+    function formatRupiah(number) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(number);
+    }
+
+    // PMT Formula for Effective Interest Rate
+    function getEffectiveInstallment(principal, annualRate, months) {
+        const r = (annualRate / 12);
+        const n = months;
+        return principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    }
+
+    // Initialize Motor Options
+    function init() {
+        const select = document.getElementById('motor-select');
+
+        motorData.forEach((motor, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = motor.name;
+            select.appendChild(option);
+        });
+
+        updateMotorData();
+    }
+
+    // Update Form fields based on selected Motor
+    function updateMotorData() {
+        const index = document.getElementById('motor-select').value;
+        const selected = motorData[index];
+        
+        document.getElementById('spec-otr').textContent = formatRupiah(selected.otr);
+        document.getElementById('spec-dp').textContent = formatRupiah(selected.dp);
+        
+        const principal = selected.otr - selected.dp;
+        document.getElementById('spec-principal').textContent = formatRupiah(principal);
+
+        calculateKredit();
+    }
+
+    // Calculate Credit Comparison dynamically
+    function calculateKredit() {
+        const index = document.getElementById('motor-select').value;
+        const selected = motorData[index];
+        const tenor = parseInt(document.getElementById('tenor-select').value);
+
+        const OTR = selected.otr;
+        const dealerDP = selected.dp;
+        const dealerPrincipal = OTR - dealerDP;
+
+        // --- 1. LEASING (DEALER) ---
+        // We estimate the dealer's rate from the 36-month OTR data.
+        const baseInstallment36 = selected.installment36;
+        const interest36 = (baseInstallment36 * 36) - dealerPrincipal;
+        const dealerFlatRateAnnual = (interest36 / dealerPrincipal) / 3;
+
+        let dealerMonthly;
+        let isRealBrosur = false;
+
+        // Use real values from brochure where available
+        if (tenor === 36) {
+            dealerMonthly = baseInstallment36;
+            isRealBrosur = true;
+        } else if (tenor === 42 && selected.installment42 !== null) {
+            dealerMonthly = selected.installment42;
+            isRealBrosur = true;
+        } else {
+            // Estimate based on the computed flat interest rate
+            const interest = dealerPrincipal * dealerFlatRateAnnual * (tenor / 12);
+            dealerMonthly = Math.round((dealerPrincipal + interest) / tenor);
+        }
+
+        const dealerTotalPaid = dealerDP + (dealerMonthly * tenor);
+        const dealerTotalInterest = dealerTotalPaid - OTR;
+
+        // --- 2. BANK BRI (KUR 7% & NON-KUR 9%) ---
+        let plavon = Math.floor(dealerPrincipal / 1000000) * 1000000;
+        if (plavon > 100000000) plavon = 100000000;
+        if (plavon < 1000000) plavon = 1000000;
+        
+        const bankDP = OTR - plavon;
+        const bankAdmin = 150000;
+        const bankProvisi = plavon * 0.0025;
+        const bankFireInsurance = 300000;
+        const bankFees = bankAdmin + bankProvisi + bankFireInsurance;
+
+        // KUR 7%
+        const kurMonthly = Math.round(getEffectiveInstallment(plavon, 0.07, tenor));
+        const kurTotalPaid = bankDP + bankFees + (kurMonthly * tenor);
+        const kurTotalInterestCost = kurTotalPaid - OTR;
+        const kurEquivalentFlatAnnual = (kurTotalInterestCost / plavon) / (tenor / 12);
+
+        // Non-KUR 9%
+        const nonkurMonthly = Math.round(getEffectiveInstallment(plavon, 0.09, tenor));
+        const nonkurTotalPaid = bankDP + bankFees + (nonkurMonthly * tenor);
+        const nonkurTotalInterestCost = nonkurTotalPaid - OTR;
+        const nonkurEquivalentFlatAnnual = (nonkurTotalInterestCost / plavon) / (tenor / 12);
+
+        // --- UPDATE UI TEXT ---
+        // Dealer
+        document.getElementById('dealer-monthly').textContent = formatRupiah(dealerMonthly);
+        document.getElementById('dealer-interest').textContent = formatRupiah(dealerTotalInterest);
+        document.getElementById('dealer-rate').textContent = (dealerFlatRateAnnual * 100).toFixed(2) + "% Flat/Th";
+        document.getElementById('dealer-badge').textContent = isRealBrosur ? "Brosur OTO/FIF" : "Estimasi Leasing";
+        document.getElementById('dealer-tenor-text').textContent = "Angsuran / bulan (" + tenor + "x)";
+
+        // BRI KUR
+        document.getElementById('bri-kur-monthly').textContent = formatRupiah(kurMonthly);
+        document.getElementById('bri-kur-interest').textContent = formatRupiah(kurTotalInterestCost);
+        document.getElementById('bri-kur-rate').textContent = (kurEquivalentFlatAnnual * 100).toFixed(2) + "% Flat/Th";
+        document.getElementById('bri-kur-tenor-text').textContent = "Angsuran / bulan (" + tenor + "x)";
+
+        // BRI Non-KUR
+        document.getElementById('bri-nonkur-monthly').textContent = formatRupiah(nonkurMonthly);
+        document.getElementById('bri-nonkur-interest').textContent = formatRupiah(nonkurTotalInterestCost);
+        document.getElementById('bri-nonkur-rate').textContent = (nonkurEquivalentFlatAnnual * 100).toFixed(2) + "% Flat/Th";
+        document.getElementById('bri-nonkur-tenor-text').textContent = "Angsuran / bulan (" + tenor + "x)";
+
+        // Table
+        document.getElementById('tbl-dealer-dp').textContent = formatRupiah(dealerDP) + " (±" + ((dealerDP/OTR)*100).toFixed(0) + "%)";
+        document.getElementById('tbl-bri-kur-dp').innerHTML = formatRupiah(bankDP) + "<br><span style='font-size:0.75rem;color:var(--text-muted);'>(Beli tunai sisa OTR)</span>";
+        document.getElementById('tbl-bri-nonkur-dp').innerHTML = formatRupiah(bankDP) + "<br><span style='font-size:0.75rem;color:var(--text-muted);'>(Beli tunai sisa OTR)</span>";
+        
+        document.getElementById('tbl-dealer-rate').textContent = (dealerFlatRateAnnual * 100).toFixed(2) + "% Flat / Tahun";
+        document.getElementById('tbl-bri-kur-rate').textContent = "7.00% Efektif / Tahun (" + (kurEquivalentFlatAnnual * 100).toFixed(2) + "% Flat)";
+        document.getElementById('tbl-bri-nonkur-rate').textContent = "9.00% Efektif / Tahun (" + (nonkurEquivalentFlatAnnual * 100).toFixed(2) + "% Flat)";
+
+        // Savings Banner (Comparing Dealer vs KUR)
+        const savings = dealerTotalPaid - kurTotalPaid;
+        document.getElementById('savings-amount').textContent = formatRupiah(Math.max(0, savings));
+
+        // --- UPDATE BARS CHART ---
+        const maxVal = Math.max(OTR, dealerTotalPaid, kurTotalPaid, nonkurTotalPaid);
+        
+        const cashPct = (OTR / maxVal) * 100;
+        const briKurPct = (kurTotalPaid / maxVal) * 100;
+        const briNonkurPct = (nonkurTotalPaid / maxVal) * 100;
+        const dealerPct = (dealerTotalPaid / maxVal) * 100;
+
+        document.getElementById('lbl-cash-total').textContent = formatRupiah(OTR);
+        document.getElementById('lbl-bri-kur-total').textContent = formatRupiah(kurTotalPaid);
+        document.getElementById('lbl-bri-nonkur-total').textContent = formatRupiah(nonkurTotalPaid);
+        document.getElementById('lbl-dealer-total').textContent = formatRupiah(dealerTotalPaid);
+
+        document.getElementById('bar-cash').style.width = cashPct + "%";
+        document.getElementById('bar-cash').textContent = cashPct.toFixed(0) + "%";
+
+        document.getElementById('bar-bri-kur').style.width = briKurPct + "%";
+        document.getElementById('bar-bri-kur').textContent = briKurPct.toFixed(0) + "%";
+
+        document.getElementById('bar-bri-nonkur').style.width = briNonkurPct + "%";
+        document.getElementById('bar-bri-nonkur').textContent = briNonkurPct.toFixed(0) + "%";
+
+        document.getElementById('bar-dealer').style.width = dealerPct + "%";
+        document.getElementById('bar-dealer').textContent = dealerPct.toFixed(0) + "%";
+    }
+
+    // Run
+    window.onload = init;
+</script>
+
+</body>
+</html>
